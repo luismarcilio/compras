@@ -1,0 +1,311 @@
+<databaseChangeLog
+	xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<changeSet author="luismarcilio" id="01">
+		<createTable tableName="company">
+			<column name="id" type="int" autoIncrement="true"
+				startWith="1" incrementBy="1">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="name" type="varchar(50)">
+				<constraints nullable="false" />
+			</column>
+			<column name="tax_identification" type="varchar(14)">
+				<constraints nullable="false" />
+			</column>
+			<column name="address_Id" type="int">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+		<createIndex tableName="company" indexName="company_tax_id"
+			unique="true">
+			<column name="tax_identification" />
+		</createIndex>
+
+
+		<createTable tableName="address">
+			<column name="id" type="int" autoIncrement="true"
+				startWith="1" incrementBy="1">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="city_Id" type="int">
+				<constraints nullable="false" />
+			</column>
+			<column name="state_Id" type="int">
+				<constraints nullable="false" />
+			</column>
+			<column name="country_Id" type="int">
+				<constraints nullable="false" />
+			</column>
+			<column name="street" type="varchar(50)">
+				<constraints nullable="false" />
+			</column>
+			<column name="number" type="int">
+				<constraints nullable="false" />
+			</column>
+			<column name="complement" type="varchar(50)">
+				<constraints nullable="false" />
+			</column>
+			<column name="county" type="varchar(50)">
+				<constraints nullable="false" />
+			</column>
+			<column name="po_code" type="varchar(50)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+		<addForeignKeyConstraint
+			constraintName="addr_cmpny_fk" referencedTableName="address"
+			baseColumnNames="address_id" baseTableName="company"
+			referencedColumnNames="id" />
+
+		<createTable tableName="city">
+			<column name="id" type="int" startWith="1" incrementBy="1">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="name" type="varchar(50)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+		<createTable tableName="state">
+			<column name="id" type="int" startWith="1" incrementBy="1">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="name" type="varchar(50)">
+				<constraints nullable="false" />
+			</column>
+			<column name="acronym" type="varchar(2)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+		<createTable tableName="country">
+			<column name="id" type="int" startWith="1" incrementBy="1">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="name" type="varchar(50)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+		<addForeignKeyConstraint
+			constraintName="state_addr_fk" referencedTableName="state"
+			baseColumnNames="state_id" baseTableName="address"
+			referencedColumnNames="id" />
+
+		<addForeignKeyConstraint
+			constraintName="country_addr_fk" referencedTableName="country"
+			baseColumnNames="country_id" baseTableName="address"
+			referencedColumnNames="id" />
+
+		<createTable tableName="product">
+			<column name="id" type="int" startWith="1" incrementBy="1">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="name" type="varchar(50)">
+				<constraints nullable="false" />
+			</column>
+			<column name="unity_Id" type="int">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+		<createTable tableName="unity">
+			<column name="id" type="int" startWith="1" incrementBy="1">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="name" type="varchar(50)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+		<addForeignKeyConstraint
+			constraintName="unity_product_fk" referencedTableName="unity"
+			baseColumnNames="unity_id" baseTableName="product"
+			referencedColumnNames="id" />
+
+		<createTable tableName="product_value">
+			<column name="id" type="int" startWith="1" incrementBy="1">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+		
+			<column name="company_id" type="int">
+				<constraints nullable="false" />
+			</column>
+			<column name="product_id" type="int">
+				<constraints nullable="false" />
+			</column>
+			<column name="date" type="date">
+				<constraints nullable="false" />
+			</column>
+			<column name="value" type="float">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+		<addForeignKeyConstraint
+			constraintName="prod_prod_value_fk" referencedTableName="product"
+			baseColumnNames="product_id" baseTableName="product_value"
+			referencedColumnNames="id" />
+
+		<addForeignKeyConstraint
+			constraintName="comp_prod_value_fk" referencedTableName="company"
+			baseColumnNames="company_id" baseTableName="product_value"
+			referencedColumnNames="id" />
+
+		<createTable tableName="user">
+			<column name="id" type="int" startWith="1" incrementBy="1">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="email" type="varchar2(50)">
+				<constraints nullable="false" />
+			</column>
+			<column name="name" type="varchar2(50)">
+				<constraints nullable="false" />
+			</column>
+			<column name="tax_id" type="varchar2(50)">
+				<constraints nullable="false" />
+			</column>
+			<column name="password" type="varchar2(50)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+		<createIndex tableName="user" indexName="user_email"
+			unique="true">
+			<column name="email" />
+		</createIndex>
+
+		<createIndex tableName="user" indexName="user_tax_id"
+			unique="true">
+			<column name="tax_id" />
+		</createIndex>
+
+		<createTable tableName="fiscal_note">
+			<column name="id" type="int" startWith="1" incrementBy="1">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+
+			<column name="number" type="varchar2(20)">
+				<constraints nullable="false" />
+			</column>
+			<column name="series" type="char(2)">
+				<constraints nullable="false" />
+			</column>
+
+			<column name="company_id" type="int">
+				<constraints nullable="false" />
+			</column>
+
+
+			<column name="date" type="date">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+		<createIndex tableName="fiscal_note"
+			indexName="fiscal_note_num_ser" unique="true">
+			<column name="number" />
+			<column name="company_id" />
+			<column name="series" />
+		</createIndex>
+
+		<addForeignKeyConstraint
+			constraintName="fiscal_nt_company_fk" referencedTableName="company"
+			baseColumnNames="company_id" baseTableName="fiscal_note"
+			referencedColumnNames="id" />
+
+
+
+		<createTable tableName="purchase">
+			<column name="id" type="int" startWith="1" incrementBy="1">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+
+			<column name="company_id" type="int">
+				<constraints nullable="false" />
+			</column>
+			<column name="user_id" type="int">
+				<constraints nullable="false" />
+			</column>
+			<column name="fiscal_note_id" type="int">
+				<constraints nullable="false" />
+			</column>
+
+
+			<column name="total_amount" type="double">
+				<constraints nullable="false" />
+			</column>
+
+		</createTable>
+
+		<addForeignKeyConstraint
+			constraintName="purchase_company_fk" referencedTableName="company"
+			baseColumnNames="company_id" baseTableName="purchase"
+			referencedColumnNames="id" />
+
+		<addForeignKeyConstraint
+			constraintName="purchase_user_fk" referencedTableName="user"
+			baseColumnNames="user_id" baseTableName="purchase"
+			referencedColumnNames="id" />
+
+		<addForeignKeyConstraint
+			constraintName="purchase_fiscal_note_fk"
+			referencedTableName="fiscal_note" baseColumnNames="fiscal_note_id"
+			baseTableName="purchase" referencedColumnNames="id" />
+
+		<createTable tableName="purchase_item">
+			<column name="id" type="int" startWith="1" incrementBy="1">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+
+			<column name="purchase_id" type="int">
+				<constraints nullable="false" />
+			</column>
+			<column name="product_id" type="int">
+				<constraints nullable="false" />
+			</column>
+			<column name="unity_id" type="int">
+				<constraints nullable="false" />
+			</column>
+			<column name="unity_value" type="double">
+				<constraints nullable="false" />
+			</column>
+			<column name="units" type="double">
+				<constraints nullable="false" />
+			</column>
+			<column name="total_value" type="double">
+				<constraints nullable="false" />
+			</column>			
+		</createTable>
+
+		<addForeignKeyConstraint
+			constraintName="purchase_itm_prch_fk"
+			referencedTableName="purchase" baseColumnNames="purchase_id"
+			baseTableName="purchase_item" referencedColumnNames="id" />
+
+		<addForeignKeyConstraint
+			constraintName="purchase_itm_prdct_fk"
+			referencedTableName="product" baseColumnNames="product_id"
+			baseTableName="purchase_item" referencedColumnNames="id" />
+
+		<addForeignKeyConstraint
+			constraintName="purchase_itm_unit_fk"
+			referencedTableName="unity" baseColumnNames="unity_id"
+			baseTableName="purchase_item" referencedColumnNames="id" />
+
+
+
+
+
+
+
+	</changeSet>
+
+</databaseChangeLog>
